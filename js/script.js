@@ -82,6 +82,9 @@ const game = {
             ['', '', '']
         ];
     },
+    checkForDrawCondition: function () {
+
+    },
     checkForRoundWinCondition: function (marker) {
         let currentMarker = marker;
         if (//Check for horizontal win
@@ -100,11 +103,12 @@ const game = {
             if (this.player.marker === currentMarker) { this.player.points++ }
             else { this.cpu.points++ }
             alert(`${currentMarker} win \n
-            Player: ${this.player.points}   CPU:${this.cpu.points}`);
+                Player: ${this.player.points}   CPU:${this.cpu.points}`);
 
         }
-        else { return `Undecided, keep playing` }
+        else { return 'Undecided' };
         this.checkForGameWinCondition();
+        this.checkForDrawCondition();
     },
     checkForGameWinCondition: function () {
         if (this.player.points === 3 || this.cpu.points === 3) {
