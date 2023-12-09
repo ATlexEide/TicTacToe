@@ -1,8 +1,11 @@
 
 const game = {
     player: {
-        points: null,
+        points: 0,
         marker: '',
+    },
+    cpu: {
+        points: 0,
     },
     gameboard: [
         ['', '', ''],
@@ -35,7 +38,7 @@ const game = {
     playTurn: function () {
         if (this.player.marker === 'O') {
             this.getCpuPlay();
-            console.log(this.checkForWinCondition('X'));
+            console.log(this.checkForRoundWinCondition('X'));
         }
         else {
             this.getPlayerPlay();
@@ -53,7 +56,7 @@ const game = {
             console.clear()
             console.log(`CPU placed ${cpuMarker} at ${row}, ${tile}`)
             this.displayConsoleBoard()
-            this.checkForWinCondition(cpuMarker)
+            this.checkForRoundWinCondition(cpuMarker)
 
         }
         else { this.getCpuPlay() }
@@ -67,12 +70,19 @@ const game = {
             console.clear()
             console.log(`PLAYER placed ${this.player.marker} at ${row}, ${tile}`)
             this.displayConsoleBoard()
-            this.checkForWinCondition(this.player.marker)
+            this.checkForRoundWinCondition(this.player.marker)
         }
         else { this.getPlayerPlay() }
         this.getCpuPlay()
     },
-    checkForWinCondition: function (marker) {
+    resetGameboard: function () {
+        this.gameboard = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ];
+    },
+    checkForRoundWinCondition: function (marker) {
         let currentMarker = marker;
         if (//Check for horizontal win
             this.gameboard[0][0] === currentMarker && this.gameboard[0][1] === currentMarker && this.gameboard[0][2] === currentMarker ||
@@ -85,9 +95,30 @@ const game = {
             // Check for diagonal win
             this.gameboard[0][0] === currentMarker && this.gameboard[1][1] === currentMarker && this.gameboard[2][2] === currentMarker ||
             this.gameboard[0][2] === currentMarker && this.gameboard[1][1] === currentMarker && this.gameboard[2][0] === currentMarker) {
-            alert(`${currentMarker} win`)
+
+            this.resetGameboard()
+            if (this.player.marker === currentMarker) { this.player.points++ }
+            else { this.cpu.points++ }
+            alert(`${currentMarker} win \n
+            Player: ${this.player.points}   CPU:${this.cpu.points}`);
+
         }
         else { return `Undecided, keep playing` }
+        this.checkForGameWinCondition();
+    },
+    checkForGameWinCondition: function () {
+        if (this.player.points === 3 || this.cpu.points === 3) {
+            let winner = '';
+            this.player.points === 3 ? winner = 'PLAYER WON' : winner = 'CPU WON';
+            alert(winner);
+            this.reset();
+        }
+    },
+    reset: function () {
+        this.player.points = 0;
+        this.cpu.points = 0;
+        this.resetGameboard();
+        this.init(prompt('X or O'));
     }
 }
-game.init(prompt())
+game.init(prompt('X or O'))
