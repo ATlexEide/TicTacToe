@@ -83,7 +83,19 @@ const game = {
         ];
     },
     checkForDrawCondition: function () {
-
+        let fullGameboard = this.gameboard[0].concat(this.gameboard[1]).concat(this.gameboard[2]);
+        let usedTiles = 0;
+        for (let i = 0; i < fullGameboard.length; i++) {
+            let tile = fullGameboard[i];
+            if (tile !== '') {
+                usedTiles++
+            }
+        }
+        console.log(`Used tiles: ${usedTiles}`)
+        if (usedTiles === 9) {
+            console.log('ITS A DRAW')
+            this.resetGameboard()
+        }
     },
     checkForRoundWinCondition: function (marker) {
         let currentMarker = marker;
@@ -103,12 +115,13 @@ const game = {
             if (this.player.marker === currentMarker) { this.player.points++ }
             else { this.cpu.points++ }
             alert(`${currentMarker} win \n
-                Player: ${this.player.points}   CPU:${this.cpu.points}`);
+            Player: ${this.player.points}   CPU:${this.cpu.points}`);
 
         }
-        else { return 'Undecided' };
+        else {
+            this.checkForDrawCondition();
+        };
         this.checkForGameWinCondition();
-        this.checkForDrawCondition();
     },
     checkForGameWinCondition: function () {
         if (this.player.points === 3 || this.cpu.points === 3) {
