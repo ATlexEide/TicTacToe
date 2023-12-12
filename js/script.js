@@ -17,7 +17,9 @@ const game = {
         console.log(this.gameboard[2]);
     },
     //For later
-    cahcedDOM: null
+    cahcedDOM: function () {
+        this.tiles = document.getElementsByClassName('tile');
+    }
     ,
     init: function (marker) {
         this.chooseMarker(marker)
