@@ -1,4 +1,3 @@
-
 const game = {
     player: {
         points: 0,
@@ -22,7 +21,6 @@ const game = {
     ,
     init: function (marker) {
         this.chooseMarker(marker)
-
     },
     chooseMarker: function (choice) {
         let chosenMarker = choice.toUpperCase();
@@ -53,8 +51,7 @@ const game = {
         let tile = Math.floor(Math.random() * 3)
         if (this.gameboard[row][tile] === '') {
             this.gameboard[row].splice(tile, 1, cpuMarker)
-            console.clear()
-            console.log(`CPU placed ${cpuMarker} at ${row}, ${tile}`)
+            console.log(`CPU placed ${cpuMarker} at Row: ${row}, Tile: ${tile}`)
             this.displayConsoleBoard()
             this.checkForRoundWinCondition(cpuMarker)
 
@@ -68,7 +65,7 @@ const game = {
         if (this.gameboard[row][tile] === '') {
             this.gameboard[row].splice(tile, 1, this.player.marker);
             console.clear()
-            console.log(`PLAYER placed ${this.player.marker} at ${row}, ${tile}`)
+            console.log(`PLAYER placed ${this.player.marker} at Row: ${row}, Tile: ${tile}`)
             this.displayConsoleBoard()
             this.checkForRoundWinCondition(this.player.marker)
         }
