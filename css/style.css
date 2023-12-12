@@ -1,0 +1,40 @@
+root {
+    --gap: 10px;
+}
+
+.container {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+}
+
+.gameboard {
+    place-self: center;
+    display: grid;
+    grid-template-rows: repeat(3, 250px);
+    grid-template-columns: repeat(3, 250px);
+    gap: var(--gap);
+}
+
+.tile {
+    background-color: black;
+    aspect-ratio: 1/1;
+}
+
+#top-row {
+    display: flex;
+    grid-column: 1 / 4;
+    grid-row: 1;
+}
+
+#middle-row {
+    display: flex;
+    grid-column: 1 / 4;
+    grid-row: 2;
+}
+
+#bottom-row {
+    display: flex;
+    grid-column: 1 / 4;
+    grid-row: 3;
+}
