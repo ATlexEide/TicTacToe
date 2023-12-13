@@ -28,6 +28,9 @@ body {
     margin: auto;
 }
 
+.tile:hover {
+    opacity: 0.5;
+}
 
 #top-row {
     display: flex;
