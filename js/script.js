@@ -1,10 +1,14 @@
 const game = {
+    nextTurn: 'X'
+    ,
     player: {
         points: 0,
-        marker: '',
+        marker: 'X',
     },
     cpu: {
         points: 0,
+        marker: '',
+
     },
     gameboard: [
         ['', '', ''],
@@ -19,19 +23,55 @@ const game = {
     //For later
     cahceDOM: function () {
         this.tiles = document.getElementsByClassName('tile');
+        this.body = document.body;
     },
-    test: function () {
+    writeStartHTML: function () {
+        this.body.innerHTML = `
+        <h1>Choose your marker!</h1>
+    <div class="marker-button-container">
+        <button id="choose-marker-x">X</button>
+        <button id="choose-marker-o">O</button>
+    </div>`
+    },
+    writeGameboardHTML: function () {
+        this.body.innerHTML = `
+        <div class="container">
+            <div class="gameboard">
+                <div id="top-row" class="rows">
+                    <div class="tile"></div>
+                    <div class="tile"></div>
+                    <div class="tile"></div>
+                </div>
+                <div id="middle-row" class="rows">
+                    <div class="tile"></div>
+                    <div class="tile"></div>
+                    <div class="tile"></div>
+                </div>
+                <div id="bottom-row" class="rows">
+                    <div class="tile"></div>
+                    <div class="tile"></div>
+                    <div class="tile"></div>
+                </div>
+            </div>
+    </div>`
+    }
+    ,
+    placeMarker: function () {
         for (let i = 0; i < this.tiles.length; i++) {
             let tile = this.tiles[i]
             tile.addEventListener('click', () => {
-
+                let marker = '';
+                if (this.nextTurn === 'player') { marker = this.player.marker; }
+                if (this.nextTurn === 'cpu') { marker = this.cpu.marker; }
+                tile.innerHTML = `${marker}`;
             });
-        }
+        };
     },
     init: function (marker) {
         // this.chooseMarker(marker);
         this.cahceDOM();
-        this.test();
+        this.placeMarker();
+        this.writeStartHTML();
     },
     chooseMarker: function (choice) {
         let chosenMarker = choice.toUpperCase();
@@ -55,16 +95,15 @@ const game = {
         displayConsoleBoard()
     },
     getCpuPlay: function () {
-        let cpuMarker = '';
-        if (this.player.marker === 'X') { cpuMarker = 'O' }
-        if (this.player.marker === 'O') { cpuMarker = 'X' }
+        if (this.player.marker === 'X') { cpu.marker = 'O' }
+        if (this.player.marker === 'O') { cpu.marker = 'X' }
         let row = Math.floor(Math.random() * 3)
         let tile = Math.floor(Math.random() * 3)
         if (this.gameboard[row][tile] === '') {
-            this.gameboard[row].splice(tile, 1, cpuMarker)
-            console.log(`CPU placed ${cpuMarker} at Row: ${row}, Tile: ${tile}`)
+            this.gameboard[row].splice(tile, 1, cpu.marker)
+            console.log(`CPU placed ${cpu.marker} at Row: ${row}, Tile: ${tile}`)
             this.displayConsoleBoard()
-            this.checkForRoundWinCondition(cpuMarker)
+            this.checkForRoundWinCondition(cpu.marker)
 
         }
         else { this.getCpuPlay() }
