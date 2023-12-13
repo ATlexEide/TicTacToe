@@ -6,26 +6,6 @@ body {
     background-color: black;
 }
 
-/* Choose marker */
-h1 {
-    color: white;
-    text-align: center;
-}
-
-.marker-button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
-
-button {
-    aspect-ratio: 1;
-    width: 200px;
-    font-size: 75px;
-}
-
-/* Gameboard */
 .container {
     display: grid;
     grid-template-rows: 1fr;
@@ -43,9 +23,7 @@ button {
 
 .tile {
     background-color: grey;
-    font-size: 200px;
     width: calc(90%/3);
-    text-align: center;
     aspect-ratio: 1;
     margin: auto;
 }
