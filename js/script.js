@@ -17,12 +17,21 @@ const game = {
         console.log(this.gameboard[2]);
     },
     //For later
-    cahcedDOM: function () {
+    cahceDOM: function () {
         this.tiles = document.getElementsByClassName('tile');
-    }
-    ,
+    },
+    test: function () {
+        for (let i = 0; i < this.tiles.length; i++) {
+            let tile = this.tiles[i]
+            tile.addEventListener('click', () => {
+
+            });
+        }
+    },
     init: function (marker) {
-        this.chooseMarker(marker)
+        // this.chooseMarker(marker);
+        this.cahceDOM();
+        this.test();
     },
     chooseMarker: function (choice) {
         let chosenMarker = choice.toUpperCase();
@@ -137,4 +146,5 @@ const game = {
         this.init(prompt('X or O'));
     }
 }
-game.init(prompt('X or O'))
+// game.init(prompt('X or O'))
+game.init()
