@@ -3,7 +3,7 @@ const game = {
     ,
     player: {
         points: 0,
-        marker: 'X',
+        marker: '',
     },
     cpu: {
         points: 0,
@@ -15,23 +15,29 @@ const game = {
         ['', '', ''],
         ['', '', '']
     ],
+    init: function (marker) {
+        this.writeStartHTML();
+        this.getClickedMarkerBtn();
+    },
+    cahceDOM: function () {
+        this.tiles = document.getElementsByClassName('tile');
+        this.body = document.body;
+        this.playAsXBtn = document.getElementById('choose-marker-x');
+        this.playAsOBtn = document.getElementById('choose-marker-o');
+    },
     displayConsoleBoard: function () {
         console.log(this.gameboard[0]);
         console.log(this.gameboard[1]);
         console.log(this.gameboard[2]);
     },
-    //For later
-    cahceDOM: function () {
-        this.tiles = document.getElementsByClassName('tile');
-        this.body = document.body;
-    },
     writeStartHTML: function () {
-        this.body.innerHTML = `
+        document.body.innerHTML = `
         <h1>Choose your marker!</h1>
     <div class="marker-button-container">
         <button id="choose-marker-x">X</button>
         <button id="choose-marker-o">O</button>
-    </div>`
+    </div>`;
+        this.cahceDOM();
     },
     writeGameboardHTML: function () {
         this.body.innerHTML = `
@@ -53,7 +59,8 @@ const game = {
                     <div class="tile"></div>
                 </div>
             </div>
-    </div>`
+    </div>`;
+        this.cahceDOM();
     }
     ,
     placeMarker: function () {
@@ -67,21 +74,25 @@ const game = {
             });
         };
     },
-    init: function (marker) {
-        // this.chooseMarker(marker);
-        this.cahceDOM();
-        this.placeMarker();
-        this.writeStartHTML();
+    getClickedMarkerBtn: function () {
+        this.playAsXBtn.addEventListener('click', () => {
+            this.chooseMarker('X');
+        });
+        this.playAsOBtn.addEventListener('click', () => {
+            this.chooseMarker('O');
+        })
     },
-    chooseMarker: function (choice) {
-        let chosenMarker = choice.toUpperCase();
-        console.log(chosenMarker)
+    chooseMarker: function (marker) {
+        let chosenMarker = `${marker}`;
+
+
         chosenMarker === 'X' ? this.player.marker = 'X' :
             chosenMarker === 'O' ? this.player.marker = 'O' :
                 console.log('Please choose X or O');
         if (chosenMarker === 'X' || chosenMarker === 'O') {
             console.log(`You chose ${this.player.marker}!`)
         }
+        this.writeGameboardHTML();
         this.playTurn();
     },
     playTurn: function () {
@@ -95,23 +106,21 @@ const game = {
         displayConsoleBoard()
     },
     getCpuPlay: function () {
-        if (this.player.marker === 'X') { cpu.marker = 'O' }
-        if (this.player.marker === 'O') { cpu.marker = 'X' }
+        if (this.player.marker === 'X') { this.cpu.marker = 'O' }
+        if (this.player.marker === 'O') { this.cpu.marker = 'X' }
         let row = Math.floor(Math.random() * 3)
         let tile = Math.floor(Math.random() * 3)
         if (this.gameboard[row][tile] === '') {
-            this.gameboard[row].splice(tile, 1, cpu.marker)
-            console.log(`CPU placed ${cpu.marker} at Row: ${row}, Tile: ${tile}`)
+            this.gameboard[row].splice(tile, 1, this.cpu.marker)
+            console.log(`CPU placed ${this.cpu.marker} at Row: ${row}, Tile: ${tile}`)
             this.displayConsoleBoard()
-            this.checkForRoundWinCondition(cpu.marker)
+            this.checkForRoundWinCondition(this.cpu.marker)
 
         }
         else { this.getCpuPlay() }
         this.getPlayerPlay()
     },
     getPlayerPlay: function () {
-        let row = prompt('Choose row number')
-        let tile = prompt('Choose tile number')
         if (this.gameboard[row][tile] === '') {
             this.gameboard[row].splice(tile, 1, this.player.marker);
             console.clear()
