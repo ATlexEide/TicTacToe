@@ -11,9 +11,9 @@ const game = {
 
     },
     gameboard: [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
+        '', '', '',
+        '', '', '',
+        '', '', ''
     ],
     init: function (marker) {
         this.writeStartHTML();
@@ -42,24 +42,17 @@ const game = {
     writeGameboardHTML: function () {
         this.body.innerHTML = `
         <div class="container">
-            <div class="gameboard">
-                <div id="top-row" class="rows">
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                </div>
-                <div id="middle-row" class="rows">
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                </div>
-                <div id="bottom-row" class="rows">
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                    <div class="tile"></div>
-                </div>
-            </div>
-    </div>`;
+        <div id="gameboard">
+        </div>
+        </div>`;
+        for (let i = 0; i < this.gameboard.length; i++) {
+            let gameboardContainer = document.getElementById('gameboard');
+            let tile = this.gameboard[i];
+            let newDiv = document.createElement('div');
+            newDiv.setAttribute('class', 'tile');
+            newDiv.innerHTML = `${tile}`;
+            gameboardContainer.appendChild(newDiv)
+        };
         this.cahceDOM();
     }
     ,
@@ -108,11 +101,10 @@ const game = {
     getCpuPlay: function () {
         if (this.player.marker === 'X') { this.cpu.marker = 'O' }
         if (this.player.marker === 'O') { this.cpu.marker = 'X' }
-        let row = Math.floor(Math.random() * 3)
-        let tile = Math.floor(Math.random() * 3)
-        if (this.gameboard[row][tile] === '') {
-            this.gameboard[row].splice(tile, 1, this.cpu.marker)
-            console.log(`CPU placed ${this.cpu.marker} at Row: ${row}, Tile: ${tile}`)
+        let tile = Math.floor(Math.random() * 9)
+        if (this.gameboard[tile] === '') {
+            this.gameboard[tile].value = this.cpu.marker;
+            console.log(`CPU placed ${this.cpu.marker} at Tile: ${tile}`)
             this.displayConsoleBoard()
             this.checkForRoundWinCondition(this.cpu.marker)
 
@@ -121,10 +113,10 @@ const game = {
         this.getPlayerPlay()
     },
     getPlayerPlay: function () {
-        if (this.gameboard[row][tile] === '') {
-            this.gameboard[row].splice(tile, 1, this.player.marker);
+        if (this.gameboard[tile] === '') {
+            this.gameboard[tile].value = this.player.marker;
             console.clear()
-            console.log(`PLAYER placed ${this.player.marker} at Row: ${row}, Tile: ${tile}`)
+            console.log(`PLAYER placed ${this.player.marker} at Tile: ${tile}`)
             this.displayConsoleBoard()
             this.checkForRoundWinCondition(this.player.marker)
         }
@@ -133,9 +125,9 @@ const game = {
     },
     resetGameboard: function () {
         this.gameboard = [
-            ['', '', ''],
-            ['', '', ''],
-            ['', '', '']
+            '', '', '',
+            '', '', '',
+            '', '', ''
         ];
     },
     checkForDrawCondition: function () {
@@ -156,16 +148,16 @@ const game = {
     checkForRoundWinCondition: function (marker) {
         let currentMarker = marker;
         if (//Check for horizontal win
-            this.gameboard[0][0] === currentMarker && this.gameboard[0][1] === currentMarker && this.gameboard[0][2] === currentMarker ||
-            this.gameboard[1][0] === currentMarker && this.gameboard[1][1] === currentMarker && this.gameboard[1][2] === currentMarker ||
-            this.gameboard[2][0] === currentMarker && this.gameboard[2][1] === currentMarker && this.gameboard[2][2] === currentMarker ||
+            this.gameboard[0] === currentMarker && this.gameboard[1] === currentMarker && this.gameboard[2] === currentMarker ||
+            this.gameboard[3] === currentMarker && this.gameboard[4] === currentMarker && this.gameboard[5] === currentMarker ||
+            this.gameboard[6] === currentMarker && this.gameboard[7] === currentMarker && this.gameboard[8] === currentMarker ||
             // Check for vertical win
-            this.gameboard[0][0] === currentMarker && this.gameboard[1][0] === currentMarker && this.gameboard[2][0] === currentMarker ||
-            this.gameboard[0][1] === currentMarker && this.gameboard[1][1] === currentMarker && this.gameboard[2][1] === currentMarker ||
-            this.gameboard[0][2] === currentMarker && this.gameboard[1][2] === currentMarker && this.gameboard[2][2] === currentMarker ||
+            this.gameboard[0] === currentMarker && this.gameboard[3] === currentMarker && this.gameboard[6] === currentMarker ||
+            this.gameboard[1] === currentMarker && this.gameboard[4] === currentMarker && this.gameboard[7] === currentMarker ||
+            this.gameboard[2] === currentMarker && this.gameboard[5] === currentMarker && this.gameboard[8] === currentMarker ||
             // Check for diagonal win
-            this.gameboard[0][0] === currentMarker && this.gameboard[1][1] === currentMarker && this.gameboard[2][2] === currentMarker ||
-            this.gameboard[0][2] === currentMarker && this.gameboard[1][1] === currentMarker && this.gameboard[2][0] === currentMarker) {
+            this.gameboard[0] === currentMarker && this.gameboard[4] === currentMarker && this.gameboard[8] === currentMarker ||
+            this.gameboard[2] === currentMarker && this.gameboard[4] === currentMarker && this.gameboard[6] === currentMarker) {
 
             this.resetGameboard()
             if (this.player.marker === currentMarker) { this.player.points++ }
