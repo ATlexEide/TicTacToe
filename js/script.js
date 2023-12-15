@@ -51,19 +51,21 @@ const game = {
             gameboardContainer.appendChild(newDiv)
         };
         this.cahceDOM();
-        this.getClickedTile();
-
+        this.addEventListenersToTiles();
     }
     ,
     getClickedMarkerBtn: function () {
         this.playAsXBtn.addEventListener('click', () => {
             this.chooseMarker('X');
+            this.writeGameboardHTML();
         });
         this.playAsOBtn.addEventListener('click', () => {
             this.chooseMarker('O');
+            this.getCpuPlay();
+            this.writeGameboardHTML();
         })
     },
-    getClickedTile: function () {
+    addEventListenersToTiles: function () {
         for (let i = 0; i < this.tiles.length; i++) {
             tile = this.tiles[i];
             tile.addEventListener('click', () => {
@@ -73,24 +75,10 @@ const game = {
     }
     ,
     chooseMarker: function (marker) {
-        let chosenMarker = `${marker}`;
-        chosenMarker === 'X' ? this.player.marker = 'X' :
-            chosenMarker === 'O' ? this.player.marker = 'O' :
-                console.log('Please choose X or O');
-        if (chosenMarker === 'X' || chosenMarker === 'O') {
+        this.player.marker = marker;
+        if (this.player.marker === 'X' || this.player.marker === 'O') {
             console.log(`You chose ${this.player.marker}!`)
         }
-        this.writeGameboardHTML();
-        this.playTurn();
-    },
-    playTurn: function () {
-        if (this.player.marker === 'O') {
-            this.getCpuPlay();
-            console.log(this.checkForRoundWinCondition('X'));
-        }
-        else {
-        }
-        this.displayConsoleBoard()
     },
     getCpuPlay: function () {
         if (this.player.marker === 'X') { this.cpu.marker = 'O' }
@@ -102,23 +90,20 @@ const game = {
             this.displayConsoleBoard();
             this.checkForRoundWinCondition(this.cpu.marker);
             this.writeGameboardHTML();
-
         }
         else { this.getCpuPlay() }
-        this.getClickedTile()
     },
     getPlayerPlay: function (tile) {
         if (this.gameboard[tile] === '') {
             this.gameboard[tile] = this.player.marker;
-            console.clear()
-            console.log(`PLAYER placed ${this.player.marker} at Tile: ${tile}`)
+            console.log('PLAYER PLACED HERE')
             this.displayConsoleBoard()
             this.checkForRoundWinCondition(this.player.marker)
-            this.writeGameboardHTML();
         }
-        else { this.getClickedTile() }
+        if (this.gameboard[tile] !== '') { }
         this.getCpuPlay()
-    },
+    }
+    ,
     resetGameboard: function () {
         this.gameboard = [
             '', '', '',
