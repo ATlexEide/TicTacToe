@@ -1,6 +1,4 @@
 const game = {
-    nextTurn: 'X'
-    ,
     player: {
         points: 0,
         marker: '',
@@ -20,15 +18,13 @@ const game = {
         this.getClickedMarkerBtn();
     },
     cahceDOM: function () {
-        this.tiles = document.getElementsByClassName('tile');
         this.body = document.body;
+        this.tiles = document.getElementsByClassName('tile');
         this.playAsXBtn = document.getElementById('choose-marker-x');
         this.playAsOBtn = document.getElementById('choose-marker-o');
     },
     displayConsoleBoard: function () {
-        console.log(this.gameboard[0]);
-        console.log(this.gameboard[1]);
-        console.log(this.gameboard[2]);
+        console.log(this.gameboard)
     },
     writeStartHTML: function () {
         document.body.innerHTML = `
@@ -50,23 +46,15 @@ const game = {
             let tile = this.gameboard[i];
             let newDiv = document.createElement('div');
             newDiv.setAttribute('class', 'tile');
+            newDiv.setAttribute('id', `${i}`);
             newDiv.innerHTML = `${tile}`;
             gameboardContainer.appendChild(newDiv)
         };
         this.cahceDOM();
+        this.getClickedTile();
+
     }
     ,
-    placeMarker: function () {
-        for (let i = 0; i < this.tiles.length; i++) {
-            let tile = this.tiles[i]
-            tile.addEventListener('click', () => {
-                let marker = '';
-                if (this.nextTurn === 'player') { marker = this.player.marker; }
-                if (this.nextTurn === 'cpu') { marker = this.cpu.marker; }
-                tile.innerHTML = `${marker}`;
-            });
-        };
-    },
     getClickedMarkerBtn: function () {
         this.playAsXBtn.addEventListener('click', () => {
             this.chooseMarker('X');
@@ -75,10 +63,17 @@ const game = {
             this.chooseMarker('O');
         })
     },
+    getClickedTile: function () {
+        for (let i = 0; i < this.tiles.length; i++) {
+            tile = this.tiles[i];
+            tile.addEventListener('click', () => {
+                this.getPlayerPlay(i);
+            })
+        }
+    }
+    ,
     chooseMarker: function (marker) {
         let chosenMarker = `${marker}`;
-
-
         chosenMarker === 'X' ? this.player.marker = 'X' :
             chosenMarker === 'O' ? this.player.marker = 'O' :
                 console.log('Please choose X or O');
@@ -94,33 +89,34 @@ const game = {
             console.log(this.checkForRoundWinCondition('X'));
         }
         else {
-            this.getPlayerPlay();
         }
-        displayConsoleBoard()
+        this.displayConsoleBoard()
     },
     getCpuPlay: function () {
         if (this.player.marker === 'X') { this.cpu.marker = 'O' }
         if (this.player.marker === 'O') { this.cpu.marker = 'X' }
-        let tile = Math.floor(Math.random() * 9)
+        let tile = Math.floor(Math.random() * 9);
         if (this.gameboard[tile] === '') {
-            this.gameboard[tile].value = this.cpu.marker;
-            console.log(`CPU placed ${this.cpu.marker} at Tile: ${tile}`)
-            this.displayConsoleBoard()
-            this.checkForRoundWinCondition(this.cpu.marker)
+            this.gameboard[tile] = this.cpu.marker;
+            console.log(`CPU placed ${this.cpu.marker} at Tile: ${tile}`);
+            this.displayConsoleBoard();
+            this.checkForRoundWinCondition(this.cpu.marker);
+            this.writeGameboardHTML();
 
         }
         else { this.getCpuPlay() }
-        this.getPlayerPlay()
+        this.getClickedTile()
     },
-    getPlayerPlay: function () {
+    getPlayerPlay: function (tile) {
         if (this.gameboard[tile] === '') {
-            this.gameboard[tile].value = this.player.marker;
+            this.gameboard[tile] = this.player.marker;
             console.clear()
             console.log(`PLAYER placed ${this.player.marker} at Tile: ${tile}`)
             this.displayConsoleBoard()
             this.checkForRoundWinCondition(this.player.marker)
+            this.writeGameboardHTML();
         }
-        else { this.getPlayerPlay() }
+        else { this.getClickedTile() }
         this.getCpuPlay()
     },
     resetGameboard: function () {
@@ -131,10 +127,9 @@ const game = {
         ];
     },
     checkForDrawCondition: function () {
-        let fullGameboard = this.gameboard[0].concat(this.gameboard[1]).concat(this.gameboard[2]);
         let usedTiles = 0;
-        for (let i = 0; i < fullGameboard.length; i++) {
-            let tile = fullGameboard[i];
+        for (let i = 0; i < this.gameboard.length; i++) {
+            let tile = this.gameboard[i];
             if (tile !== '') {
                 usedTiles++
             }
