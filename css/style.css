@@ -72,3 +72,9 @@ button {
     grid-column: 1 / 4;
     grid-row: 3;
 }
+
+#score-container {
+    color: white;
+    text-align: center;
+    font-size: 50px;
+}

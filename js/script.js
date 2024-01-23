@@ -1,4 +1,5 @@
 const game = {
+    gameActive: true,
     player: {
         points: 0,
         marker: '',
@@ -40,6 +41,7 @@ const game = {
         <div class="container">
         <div id="gameboard">
         </div>
+        <div id="score-container">Player  ${this.player.points} - ${this.cpu.points}  CPU</div>
         </div>`;
         for (let i = 0; i < this.gameboard.length; i++) {
             let gameboardContainer = document.getElementById('gameboard');
@@ -52,6 +54,14 @@ const game = {
         };
         this.cahceDOM();
         this.addEventListenersToTiles();
+    }
+    ,
+    writeWinnerHTML: function (winner, finalScore) {
+        this.body.innerHTML = `
+        <h1>${winner} won!</h1>
+        <h2 style="color: white; text-align: center;">Final score: ${finalScore}</h2>
+        <div style="display: flex; justify-content: center;"><button style="width: 200px; aspect-ratio: 16/9; font-size: 30px;">Play again</button></div>
+        `;
     }
     ,
     getClickedMarkerBtn: function () {
@@ -81,6 +91,7 @@ const game = {
         }
     },
     getCpuPlay: function () {
+        if (!this.gameActive) { return }
         if (this.player.marker === 'X') { this.cpu.marker = 'O' }
         if (this.player.marker === 'O') { this.cpu.marker = 'X' }
         let tile = Math.floor(Math.random() * 9);
@@ -94,6 +105,7 @@ const game = {
         else { this.getCpuPlay() }
     },
     getPlayerPlay: function (tile) {
+        if (!this.gameActive) { return }
         if (this.gameboard[tile] === '') {
             this.gameboard[tile] = this.player.marker;
             console.log('PLAYER PLACED HERE')
@@ -104,7 +116,7 @@ const game = {
         this.getCpuPlay()
     }
     ,
-    resetGameboard: function () {
+    clearGameboard: function () {
         this.gameboard = [
             '', '', '',
             '', '', '',
@@ -122,7 +134,7 @@ const game = {
         console.log(`Used tiles: ${usedTiles}`)
         if (usedTiles === 9) {
             console.log('ITS A DRAW')
-            this.resetGameboard()
+            this.clearGameboard()
         }
     },
     checkForRoundWinCondition: function (marker) {
@@ -139,12 +151,9 @@ const game = {
             this.gameboard[0] === currentMarker && this.gameboard[4] === currentMarker && this.gameboard[8] === currentMarker ||
             this.gameboard[2] === currentMarker && this.gameboard[4] === currentMarker && this.gameboard[6] === currentMarker) {
 
-            this.resetGameboard()
+            this.clearGameboard()
             if (this.player.marker === currentMarker) { this.player.points++ }
             else { this.cpu.points++ }
-            alert(`${currentMarker} win \n
-            Player: ${this.player.points}   CPU:${this.cpu.points}`);
-
         }
         else {
             this.checkForDrawCondition();
@@ -153,17 +162,17 @@ const game = {
     },
     checkForGameWinCondition: function () {
         if (this.player.points === 3 || this.cpu.points === 3) {
-            let winner = '';
-            this.player.points === 3 ? winner = 'PLAYER WON' : winner = 'CPU WON';
-            alert(winner);
-            this.reset();
+            this.gameActive = false;
+            let winner = ``;
+            this.player.points === 3 ? winner = 'PLAYER' : winner = 'CPU';
+            let finalScore = `Player ${this.player.points} : ${this.cpu.points} CPU`;
+            this.writeWinnerHTML(winner, finalScore);
         }
     },
     reset: function () {
         this.player.points = 0;
         this.cpu.points = 0;
-        this.resetGameboard();
-        this.init(prompt('X or O'));
+        this.clearGameboard();
     }
 }
 // game.init(prompt('X or O'))
