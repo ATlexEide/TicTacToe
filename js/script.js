@@ -1,6 +1,7 @@
 const game = {
     gameActive: true,
     player: {
+        name: 'Player',
         points: 0,
         marker: '',
     },
@@ -23,6 +24,7 @@ const game = {
         this.tiles = document.getElementsByClassName('tile');
         this.playAsXBtn = document.getElementById('choose-marker-x');
         this.playAsOBtn = document.getElementById('choose-marker-o');
+        this.aliasInput = document.getElementById('alias-input');
     },
     displayConsoleBoard: function () {
         console.log(this.gameboard)
@@ -33,6 +35,7 @@ const game = {
     <div class="marker-button-container">
         <button id="choose-marker-x">X</button>
         <button id="choose-marker-o">O</button>
+        <input type="text" id="alias-input">
     </div>`;
         this.cahceDOM();
     },
@@ -41,7 +44,7 @@ const game = {
         <div class="container">
         <div id="gameboard">
         </div>
-        <div id="score-container">Player  ${this.player.points} - ${this.cpu.points}  CPU</div>
+        <div id="score-container">${this.player.name}  ${this.player.points} - ${this.cpu.points}  CPU</div>
         </div>`;
         for (let i = 0; i < this.gameboard.length; i++) {
             let gameboardContainer = document.getElementById('gameboard');
@@ -64,14 +67,19 @@ const game = {
         <div id="button-container"><button id="play-again-btn">Play again</button></div>
         `;
         document.getElementById('play-again-btn').addEventListener('click', () => { game.reset() })
+    },
+    getPlayerName: function () {
+        if (this.aliasInput.value) { this.player.name = this.aliasInput.value }
     }
     ,
     getClickedMarkerBtn: function () {
         this.playAsXBtn.addEventListener('click', () => {
+            this.getPlayerName();
             this.chooseMarker('X');
             this.writeGameboardHTML();
         });
         this.playAsOBtn.addEventListener('click', () => {
+            this.getPlayerName();
             this.chooseMarker('O');
             this.getCpuPlay();
             this.writeGameboardHTML();
@@ -167,8 +175,8 @@ const game = {
         if (this.player.points === 3 || this.cpu.points === 3) {
             this.gameActive = false;
             let winner = ``;
-            this.player.points === 3 ? winner = 'PLAYER' : winner = 'CPU';
-            let finalScore = `Player ${this.player.points} : ${this.cpu.points} CPU`;
+            this.player.points === 3 ? winner = `${this.player.name}` : winner = 'CPU';
+            let finalScore = `${this.player.name} ${this.player.points} : ${this.cpu.points} CPU`;
             this.writeWinnerHTML(winner, finalScore);
         }
     },
