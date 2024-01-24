@@ -80,9 +80,11 @@ const game = {
     addEventListenersToTiles: function () {
         for (let i = 0; i < this.tiles.length; i++) {
             tile = this.tiles[i];
-            tile.addEventListener('click', () => {
-                this.getPlayerPlay(i);
-            })
+            if (!tile.innerHTML) {
+                tile.addEventListener('click', () => {
+                    this.getPlayerPlay(i);
+                })
+            }
         }
     }
     ,
@@ -107,14 +109,13 @@ const game = {
         else { this.getCpuPlay() }
     },
     getPlayerPlay: function (tile) {
-        if (!this.gameActive) { return }
+        if (!this.gameActive) { return };
         if (this.gameboard[tile] === '') {
             this.gameboard[tile] = this.player.marker;
             console.log('PLAYER PLACED HERE')
             this.displayConsoleBoard()
             this.checkForRoundWinCondition(this.player.marker)
-        }
-        if (this.gameboard[tile] !== '') { }
+        };
         this.getCpuPlay()
     }
     ,
