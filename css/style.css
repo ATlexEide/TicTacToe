@@ -102,3 +102,17 @@ button {
     display: flex;
     justify-content: center;
 }
+
+#alias-input {
+    justify-self: center;
+    text-align: center;
+    font-size: 30px;
+    height: 66px;
+    width: 200px;
+}
+
+.alias-input-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}

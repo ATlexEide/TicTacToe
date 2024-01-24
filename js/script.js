@@ -35,7 +35,9 @@ const game = {
     <div class="marker-button-container">
         <button id="choose-marker-x">X</button>
         <button id="choose-marker-o">O</button>
-        <input type="text" id="alias-input">
+        </div>
+    <div class="alias-input-container">
+        <input type="text" id="alias-input" placeholder="Alias">
     </div>`;
         this.cahceDOM();
     },
