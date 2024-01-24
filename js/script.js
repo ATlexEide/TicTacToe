@@ -59,9 +59,11 @@ const game = {
     writeWinnerHTML: function (winner, finalScore) {
         this.body.innerHTML = `
         <h1>${winner} won!</h1>
-        <h2 style="color: white; text-align: center;">Final score: ${finalScore}</h2>
-        <div style="display: flex; justify-content: center;"><button style="width: 200px; aspect-ratio: 16/9; font-size: 30px;">Play again</button></div>
+        <h2>Final score:</h2>
+        <p>${finalScore}</p>
+        <div id="button-container"><button id="play-again-btn">Play again</button></div>
         `;
+        document.getElementById('play-again-btn').addEventListener('click', () => { game.reset() })
     }
     ,
     getClickedMarkerBtn: function () {
@@ -172,7 +174,8 @@ const game = {
     reset: function () {
         this.player.points = 0;
         this.cpu.points = 0;
-        this.clearGameboard();
+        this.init();
+        this.gameActive = true;
     }
 }
 // game.init(prompt('X or O'))
