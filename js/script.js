@@ -31,14 +31,15 @@ const game = {
     },
     writeStartHTML: function () {
         document.body.innerHTML = `
+      <div class="container">
         <h1>Choose your marker!</h1>
-    <div class="marker-button-container">
+        <div class="marker-button-container">
         <button id="choose-marker-x">X</button>
         <button id="choose-marker-o">O</button>
         </div>
     <div class="alias-input-container">
         <input type="text" id="alias-input" placeholder="Alias">
-    </div>`;
+    </div></div>`;
         this.cahceDOM();
     },
     writeGameboardHTML: function () {
@@ -63,11 +64,12 @@ const game = {
     ,
     writeWinnerHTML: function (winner, finalScore) {
         this.body.innerHTML = `
+        <div class="container">
         <h1>${winner} won!</h1>
         <h2>Final score:</h2>
         <p>${finalScore}</p>
         <div id="button-container"><button id="play-again-btn">Play again</button></div>
-        `;
+        </div>`;
         document.getElementById('play-again-btn').addEventListener('click', () => { game.reset() })
     },
     getPlayerName: function () {
