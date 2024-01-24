@@ -26,9 +26,6 @@ const game = {
         this.playAsOBtn = document.getElementById('choose-marker-o');
         this.aliasInput = document.getElementById('alias-input');
     },
-    displayConsoleBoard: function () {
-        console.log(this.gameboard)
-    },
     writeStartHTML: function () {
         document.body.innerHTML = `
       <div class="container">
@@ -102,9 +99,6 @@ const game = {
     ,
     chooseMarker: function (marker) {
         this.player.marker = marker;
-        if (this.player.marker === 'X' || this.player.marker === 'O') {
-            console.log(`You chose ${this.player.marker}!`)
-        }
     },
     getCpuPlay: function () {
         if (!this.gameActive) { return }
@@ -113,8 +107,6 @@ const game = {
         let tile = Math.floor(Math.random() * 9);
         if (this.gameboard[tile] === '') {
             this.gameboard[tile] = this.cpu.marker;
-            console.log(`CPU placed ${this.cpu.marker} at Tile: ${tile}`);
-            this.displayConsoleBoard();
             this.checkForRoundWinCondition(this.cpu.marker);
             this.writeGameboardHTML();
         }
@@ -124,8 +116,6 @@ const game = {
         if (!this.gameActive) { return };
         if (this.gameboard[tile] === '') {
             this.gameboard[tile] = this.player.marker;
-            console.log('PLAYER PLACED HERE')
-            this.displayConsoleBoard()
             this.checkForRoundWinCondition(this.player.marker)
         };
         this.getCpuPlay()
@@ -146,9 +136,7 @@ const game = {
                 usedTiles++
             }
         }
-        console.log(`Used tiles: ${usedTiles}`)
         if (usedTiles === 9) {
-            console.log('ITS A DRAW')
             this.clearGameboard()
         }
     },
